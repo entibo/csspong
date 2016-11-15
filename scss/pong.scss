@@ -1,0 +1,369 @@
+// Some values are variables, some are hardcoded, it's quite a mess
+// Parts of this css are probably unnecessary 
+
+$top: 32px;
+$width: 800px;
+$height: 400px;
+$bg-color: black;
+$nrows: 34;
+
+@import "subreddit";
+
+.side .md {
+	ol, ul {
+		padding: 0;
+		margin: 0;
+	}	
+	li, em {
+		position: absolute;
+		font-size: 0px;
+		line-height: 0px;
+		color: transparent;
+	}
+	>blockquote {
+		>p {
+			display: none;
+		}
+		position: absolute;
+		z-index: 1000;
+		margin: 0;
+		padding: 0;
+		top: $top;
+		left: calc(((100% - #{$width}) / 2) - 8px);
+		width: $width;
+		height: $height;
+		border: 8px solid white;
+		&:after {
+			content: "";
+			pointer-events: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: calc(50% - 3px);
+			height: 100%;
+			border-right: 6px dashed white;
+		}
+		>ul {
+			&, &>li {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+			>li>em {
+				pointer-events: all;
+			}
+			>li:first-child {
+				background: black;
+				$row-height: #{($height / ($nrows + 6))};
+				>em {
+					position: absolute;
+					left: 0;
+					width: 100%;
+					height: #{$row-height}; 
+				}
+				@for $i from 1 through $nrows {
+					>em:nth-child(#{$i}) {
+						top: #{(($i + 2) * 10)}px; 
+						&:hover ~ em:last-child {
+							top: #{((10 * (($i + 2) + 0.5)) - 32)}px;
+						}
+					}
+				}
+				>em:nth-child(2n):hover ~ em:last-child {
+					animation-name: activate_paddle;
+				}
+				>em:nth-child(2n+1):hover ~ em:last-child {
+					animation-name: activate_paddle_bis;
+				}
+				>em:nth-child(1) {
+					top: 0;
+					height: 40px;
+				}
+				>em:nth-child(#{$nrows}) {
+					height: 40px;
+				}
+				>em:last-child {
+					pointer-events: none;
+					position: absolute;
+					border: 2px solid white;
+					box-sizing: border-box;
+					background: transparent;
+					animation-duration: 0.2s;
+					width: 16px;
+					height: 64px;
+					top: calc(50% - 32px);
+					left: 12px;
+					transition: 10ms;
+				}
+			}
+			>li:last-child {
+				overflow: hidden;
+				>em:first-child {
+					pointer-events: none;
+					position: absolute;
+					width: 16px;
+					height: 16px;
+					background: white;
+					animation: none 5.4s linear;
+					&:before {
+						content: "";
+						animation: ball_hitbox 5.4s linear;
+						pointer-events: none;
+						position: absolute;
+						content: "GAME OVER";
+						width: 600px;
+					    top: 137px;
+					    left: 100px;
+					    font: 110px monospace;
+						color: white;
+						z-index: 20000;
+					}
+				}
+				>em:last-child {
+					pointer-events: none;
+					position: absolute;
+					right: 12px;
+					top: 168px;
+					width: 16px;
+					height: 64px;
+					background: white;
+					animation: none 5.4s;
+				}
+			}
+
+			>li:first-child {
+				display: none;
+			}
+			>li:last-child {
+				display: none;
+			}
+
+			&:hover {
+				>li:first-child {
+					display: block;
+				}
+				>li:last-child {
+					&, &:before {
+						display: none;
+					}
+				}
+				&+p+ul {
+					>li:first-child {
+						display: none;
+					}
+					>li:last-child {
+						display: block;
+					}
+				}
+			}
+
+			&:first-child {
+				>li:first-child {
+					display: block;
+				}
+				>li:last-child {
+					display: block;
+					>em:first-child {
+						display: none;
+					}
+					>em:last-child {
+						display: block;
+					}
+				}
+				&:hover {
+					>li:last-child {
+						display: none;
+					}
+				}
+			}
+
+			&:nth-child(3) {
+				>li:last-child>em:first-child {
+					&, &:before {
+						animation-duration: 4.5s;
+					}
+				}
+			}
+
+			// ball animations and paddles
+			$duration: 6;
+			$n: 20;
+			@for $i from 2 through ($n + 1) {
+				$ii: (($i * 2) - 1);
+				&:nth-child(#{$ii}) {
+					> li:last-child {
+						>em:first-child {
+							animation-name: ball#{$i};
+							&, &:before {
+								animation-duration: #{($duration - (($i / 25) * (5)))}s;
+							}
+						}
+						>em:last-child {
+							animation-name: paddle#{$i};
+							animation-duration: #{($duration - (($i / 25) * (5)))}s;
+						}
+					}
+				}
+			}
+
+			// Victory
+			&:nth-child(#{((2 * $n) + 1)}) {
+				>li:last-child>em {
+					animation-duration: 4s !important;
+					&:first-child:before {
+						animation: ball_hitbox2 200s linear;
+					}
+				}
+				&:hover {
+					>li:first-child {
+						&:before {
+							content: "VICTORY";
+							position: absolute;
+							top: 130px;
+							left: 147px;
+							font: 120px monospace;
+							color: white;
+							background: black;
+							z-index: 20000;
+						}
+					}
+					>li:last-child {
+						display: block;
+						>em:first-child {
+							display: none;
+						}
+						>em:last-child {
+							display: block;
+						}
+					}
+				}
+				&+p+ul { // in case there is one
+					display: none;
+				}
+			}
+
+			&:hover ~ ol {
+				display: none;
+			}	
+
+		} // >ul
+
+		>ol {
+			&:hover {
+				display: none;
+			}
+			>li>em:first-child:before {
+				content: "PONG";
+				position: absolute;
+				top: 110px;
+				left: 255px;
+				width: 400px;
+				font: 120px monospace;
+				color: white;
+				background: black;
+				z-index: 20000;
+			}
+			>li>em:nth-child(2):before {
+				content: "hover to play";
+				position: absolute;
+				top: 230px;
+				left: 265px;
+				width: 400px;
+				font: 34px monospace;
+				color: white;
+				animation: text_blink 1.3s linear infinite;
+				background: black;
+				z-index: 20000;
+			}
+			@keyframes text_blink {
+				0% { color: white; }
+				67% { color: white; }
+				70% { color: black; }
+				97% { color: black; }
+				100% { color: white; }
+			}
+		} // >ol:first-child
+
+	} // >blockquote
+}
+
+@keyframes activate_paddle {
+	0% {
+		background: white;
+	}
+	100% {
+		background: transparent;
+	}
+}
+@keyframes activate_paddle_bis {
+	0% {
+		background: white;
+	}
+	100% {
+		background: transparent;
+	}
+}
+
+@keyframes ball_hitbox {
+	0% {
+		pointer-events: none;
+		content: "";
+		top: -24px;
+		left: -28px;
+		width: $width;
+		height: 64px;
+		color: transparent;
+	}
+	97% {
+		pointer-events: none;
+	}
+	98% {
+		pointer-events: all;
+	}
+	100% {
+		pointer-events: all;
+		content: "";
+		top: -24px;
+		left: -28px;
+		width: $width;
+		height: 64px;
+		color: transparent;
+	}
+}
+@keyframes ball_hitbox2 {
+	0% {
+		pointer-events: none;
+		content: "";
+		top: -24px;
+		left: -28px;
+		width: $width;
+		height: 64px;
+		color: transparent;
+	}
+	1.39% {
+		pointer-events: none;
+	}
+	1.4% {
+		pointer-events: all;
+		left: (-$width + 16);
+		top: -$height;
+		width: (2*$width);
+		height: (2 * $height);
+	}
+	100% {
+		pointer-events: all;
+		left: (-$width + 16);
+		top: -$height;
+		width: (2*$width);
+		height: (2 * $height);
+		content: "";
+		top: -24px;
+		left: -28px;
+		width: $width;
+		height: 64px;
+		color: transparent;
+	}
+}
+
+@import "balls";

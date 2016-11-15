@@ -1,0 +1,12 @@
+#header {
+	background: $bg-color;
+}
+.res-navTop #header-bottom-right, #header-bottom-right {
+	bottom: auto;
+	top: $height + 60px;
+	border-radius: 0px 0px 0px 3px;
+}
+#header-bottom-left {
+  margin-top: $height + 40px;
+  background: #cee3f8;
+}

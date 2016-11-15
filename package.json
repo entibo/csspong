@@ -1,0 +1,24 @@
+{
+  "name": "pong.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --inline --watch",
+    "build": "./build.sh"
+  },
+  "author": "entibo",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "css-loader": "^0.25.0",
+    "es6-promise": "^4.0.5",
+    "html-loader": "^0.4.4",
+    "markdown-loader": "^0.1.7",
+    "marked": "^0.3.6",
+    "node-sass": "^3.11.3",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3"
+  }
+}
