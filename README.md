@@ -3,6 +3,7 @@
 A playable game of pong powered only by CSS!  
 It was designed to be hosted on a subreddit, so you can play it at [reddit.com/r/csspong](http://reddit.com/r/csspong)  
 
+I tried to explain how it works over [there](https://www.reddit.com/r/csspong/comments/5cyqcd/how_it_works/)
 
 ## Development
 
